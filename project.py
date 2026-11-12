@@ -1,6 +1,4 @@
 import time
-import datetime
-import json
 from functions import *
 from clearTerm import *
 
