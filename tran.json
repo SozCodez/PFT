@@ -1,0 +1,18 @@
+{
+    "Transactions": [
+        {
+            "Desc": "Grocery",
+            "Amount": 30.45,
+            "Type": "Expense",
+            "Category": "Food",
+            "Date": "2026-11-11"
+        },
+        {
+            "Desc": "Grocery",
+            "Amount": 10.24,
+            "Type": "Expense",
+            "Category": "Food",
+            "Date": "2026-11-11"
+        }
+    ]
+}
