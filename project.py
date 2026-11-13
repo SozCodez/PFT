@@ -1,6 +1,7 @@
 import time
 from functions import *
 from clearTerm import *
+from reports import *
 
 #Phase 1
 #Building main command-line menu
@@ -10,8 +11,9 @@ menuOptions = {
     "3.": "View total income",
     "4.": "View total expenses",
     "5.": "View account balance",
-    "6.": "Convert currencies",
-    "7.": "Exit program"
+    #"6.": "View reports",
+    "7.": "Convert currencies",
+    "8.": "Exit program"
 }
 menuHead = """
 ========================
@@ -53,10 +55,15 @@ def main():
             clearTerminal()
         elif selectedOpt == "6.":
             clearTerminal()
-            convertCurr()
+            averageMonthly()
             time.sleep(1)
             clearTerminal()
         elif selectedOpt == "7.":
+            clearTerminal()
+            convertCurr()
+            time.sleep(1)
+            clearTerminal()
+        elif selectedOpt == "8.":
             exitProgram()
             break
         else:

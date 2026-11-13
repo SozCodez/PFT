@@ -55,8 +55,8 @@ def viewTransactions():
         for item in jsonData["Transactions"]:
             print(
                 f"{item["Desc"]}\n",
-                f"{item["Amount"]}\n",
-                f"{item["Type"]}\n",
+                f"${item["Amount"]:.2f}\n"
+                f" {item["Type"]}\n",
                 f"{item["Category"]}\n",
                 f"{item["Date"]}\n"
             )
@@ -64,7 +64,6 @@ def viewTransactions():
 
         input0 = input("Enter 'q' to go back, or e/i for\nexpense or income only: ")
         if input0 == "q":
-            clearTerminal()
             break
         elif input0 == "e":
             clearTerminal()
@@ -78,7 +77,7 @@ def viewTransactions():
                     if item["Type"] == "Expense":
                         print(
                             f"{item["Desc"]}\n",
-                            f"-${item["Amount"]}\n",
+                            f"-${item["Amount"]:.2f}\n",
                             f"{item["Category"]}\n",
                             f"{item["Date"]}\n"
                         )
@@ -100,7 +99,7 @@ def viewTransactions():
                     if item["Type"] == "Income":
                         print(
                             f"{item["Desc"]}\n",
-                            f"${item["Amount"]}\n",
+                            f"${item["Amount"]:.2f}\n",
                             f"{item["Category"]}\n",
                             f"{item["Date"]}\n"
                         )
@@ -128,6 +127,7 @@ def viewExpenses():
         menuTE = []
         expenseDict = {}
         expensesT = 0
+        largest = ["", 0]
         for item in jsonData["Transactions"]:
             if item["Type"] == "Expense":
                 if item["Desc"] not in expenseDict:
@@ -145,12 +145,31 @@ def viewExpenses():
             menuTEidx[menuTEcnt] = desc
             print(f"{str(menuTEcnt)}. {desc} - ${expenseDict[desc]}")
         print(f"Total: ${expensesT}")
-        input0 = input("Enter expense # or 'q' to go back: ")
+        for desc, expense in expenseDict.items():
+            if expense > largest[1]:
+                largest[1] = expense
+                largest[0] = desc
+        if largest != ["", 0]:
+            print(f"Highest expense: {largest[0]} is ${largest[1]:.2f} of your expenses")
+            input0 = input("Enter expense # or 'q' to go back: ")
+        else:
+            input0 = input("Enter 'q' to go back: ")
+
         category = ""
+        while True:
+            try:
+                intInput0 = int(input0)
+                break
+            except ValueError:
+                if input0 != "q":
+                    input0 = input("Invalid option: ")
+                else:
+                    break
+                    
         if input0 != "q":
             for index in listSetMenuTE:
-                if (int(input0)-1) == listSetMenuTE.index(index):
-                    category = listSetMenuTE[int(input0) - 1]
+                if (intInput0-1) == listSetMenuTE.index(index):
+                    category = listSetMenuTE[intInput0 - 1]
             
         if category == "":
 
@@ -183,12 +202,12 @@ def viewExpenses():
         
             
 def viewIncome():
-    print("""
+    while True:
+        print("""
     ============
     TOTAL INCOME
     ============
     """)
-    while True:
         with open("tran.json", "r") as f:
             jsonData = json.load(f)
         menuTI = []
@@ -212,6 +231,8 @@ def viewIncome():
         
         if input0 == "q":
             break
+        else:
+            clearTerminal()
 
 def viewBalance():
     while True:
@@ -247,12 +268,15 @@ def convertCurr():
         CURRENCY CONVERTER
         ==================
         """)
+        print("caution: follow instructions")
         print()
         baseCode = input("Enter ISO 4217 of currency to convert: ").upper()
         baseAmount = input(f"Enter amount in {baseCode}: ")
         targetCode = input("Enter ISO 4217 of currency converting to: ").upper()
-        conversion = requests.get(f"https://v6.exchangerate-api.com/v6/YOUR-API-KEY/pair/{baseCode}/{targetCode}")
-        targetAmount = baseAmount * conversion["conversion_rate"]
+        conversion = requests.get(f"https://v6.exchangerate-api.com/v6/abacf29534c61155763f60ab/pair/{baseCode}/{targetCode}")
+        conversion = conversion.json()
+        #print(conversion)
+        targetAmount = float(baseAmount) * conversion["conversion_rate"]
         print()
         print(f"{baseAmount} in {baseCode} is {targetAmount:,.2f} in {targetCode}")
         input0 = input("Enter 'q' to go back: ")
