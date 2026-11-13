@@ -10,7 +10,8 @@ menuOptions = {
     "3.": "View total income",
     "4.": "View total expenses",
     "5.": "View account balance",
-    "6.": "Exit"
+    "6.": "Convert currencies",
+    "7.": "Exit program"
 }
 menuHead = """
 ========================
@@ -45,7 +46,17 @@ def main():
             viewExpenses()
             time.sleep(1)
             clearTerminal()
+        elif selectedOpt == "5.":
+            clearTerminal()
+            viewBalance()
+            time.sleep(1)
+            clearTerminal()
         elif selectedOpt == "6.":
+            clearTerminal()
+            convertCurr()
+            time.sleep(1)
+            clearTerminal()
+        elif selectedOpt == "7.":
             exitProgram()
             break
         else:
